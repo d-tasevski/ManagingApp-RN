@@ -1,0 +1,40 @@
+import { auth } from 'firebase';
+
+import types from '../types';
+
+export const emailChanged = text => ({
+	type: types.EMAIL_CHANGED,
+	payload: text,
+});
+
+export const passChanged = text => ({
+	type: types.PASS_CHANGED,
+	payload: text,
+});
+
+requestAuthSuccess = user => ({
+	type: types.AUTH_SUCCESS,
+	payload: user,
+});
+
+requestAuthFailure = () => ({
+	type: types.AUTH_ERROR,
+});
+
+export const requestAuth = (email, password) => dispatch => {
+	dispatch({ type: types.REQ_AUTH });
+	return auth()
+		.signInWithEmailAndPassword(email, password)
+		.then(user => dispatch(requestAuthSuccess(user)))
+		.catch(() =>
+			auth()
+				.createUserWithEmailAndPassword(email, password)
+				.then(user => dispatch(requestAuthSuccess(user)))
+				.catch(() => dispatch(requestAuthFailure()))
+		);
+};
+
+export const setUser = user => ({
+	type: types.SET_USER,
+	user,
+});

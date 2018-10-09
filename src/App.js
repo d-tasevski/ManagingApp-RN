@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { View } from 'react-native';
+import { connect } from 'react-redux';
 import firebase from 'firebase';
 
 import config from './config';
-import rootReducer from './reducers';
+import { setUser } from './actions';
 
-const store = createStore(rootReducer);
+import LoginForm from './components/LoginForm';
+import Header from './components/common/Header';
 
-export class App extends Component {
-	state = {
-		isLoggedIn: null,
-	};
-
+class App extends Component {
 	componentDidMount() {
 		firebase.initializeApp(config.firebaseConfig);
-
 		firebase.auth().onAuthStateChanged(user => {
-			if (!user) return this.setState({ isLoggedIn: false });
+			if (!user) return this.props.setUser({});
 
-			this.setState({ isLoggedIn: true });
+			this.props.setUser(user);
 		});
 	}
 
@@ -28,13 +23,19 @@ export class App extends Component {
 
 	render() {
 		return (
-			<Provider store={store}>
-				<View>
-					<Text>Manager</Text>
-				</View>
-			</Provider>
+			<View>
+				<Header text="E-Manager" />
+				<LoginForm />
+			</View>
 		);
 	}
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+	setUser: user => dispatch(setUser(user)),
+});
+
+export default connect(
+	null,
+	{ setUser }
+)(App);
