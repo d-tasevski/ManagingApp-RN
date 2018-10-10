@@ -1,4 +1,5 @@
 import { auth } from 'firebase';
+import { Actions } from 'react-native-router-flux';
 
 import types from '../types';
 
@@ -12,10 +13,14 @@ export const passChanged = text => ({
 	payload: text,
 });
 
-requestAuthSuccess = user => ({
-	type: types.AUTH_SUCCESS,
-	payload: user,
-});
+requestAuthSuccess = user => {
+	Actions.employeeList();
+
+	return {
+		type: types.AUTH_SUCCESS,
+		payload: user,
+	};
+};
 
 requestAuthFailure = () => ({
 	type: types.AUTH_ERROR,
@@ -38,3 +43,5 @@ export const setUser = user => ({
 	type: types.SET_USER,
 	user,
 });
+
+export const logoutUser = () => auth().signOut();
