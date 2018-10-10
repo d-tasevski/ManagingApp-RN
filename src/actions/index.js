@@ -1,4 +1,5 @@
 import { auth } from 'firebase';
+import { Actions } from 'react-native-router-flux';
 
 import types from '../types';
 
@@ -12,13 +13,18 @@ export const passChanged = text => ({
 	payload: text,
 });
 
-requestAuthSuccess = user => ({
-	type: types.AUTH_SUCCESS,
-	payload: user,
-});
+requestAuthSuccess = user => {
+	Actions.main();
 
-requestAuthFailure = () => ({
+	return {
+		type: types.AUTH_SUCCESS,
+		payload: user,
+	};
+};
+
+requestAuthFailure = err => ({
 	type: types.AUTH_ERROR,
+	payload: err,
 });
 
 export const requestAuth = (email, password) => dispatch => {
@@ -30,7 +36,7 @@ export const requestAuth = (email, password) => dispatch => {
 			auth()
 				.createUserWithEmailAndPassword(email, password)
 				.then(user => dispatch(requestAuthSuccess(user)))
-				.catch(() => dispatch(requestAuthFailure()))
+				.catch(err => dispatch(requestAuthFailure(err)))
 		);
 };
 
@@ -38,3 +44,5 @@ export const setUser = user => ({
 	type: types.SET_USER,
 	user,
 });
+
+export const logoutUser = () => auth().signOut();
