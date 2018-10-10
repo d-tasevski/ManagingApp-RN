@@ -25,6 +25,7 @@ export default (state = initialState, action) => {
 				...initialState,
 				email: state.email,
 				error: 'Authorization Error',
+				devMsg: action.payload,
 			};
 		default:
 			return state;

@@ -14,7 +14,7 @@ export const passChanged = text => ({
 });
 
 requestAuthSuccess = user => {
-	Actions.employeeList();
+	Actions.main();
 
 	return {
 		type: types.AUTH_SUCCESS,
@@ -22,8 +22,9 @@ requestAuthSuccess = user => {
 	};
 };
 
-requestAuthFailure = () => ({
+requestAuthFailure = err => ({
 	type: types.AUTH_ERROR,
+	payload: err,
 });
 
 export const requestAuth = (email, password) => dispatch => {
@@ -35,7 +36,7 @@ export const requestAuth = (email, password) => dispatch => {
 			auth()
 				.createUserWithEmailAndPassword(email, password)
 				.then(user => dispatch(requestAuthSuccess(user)))
-				.catch(() => dispatch(requestAuthFailure()))
+				.catch(err => dispatch(requestAuthFailure(err)))
 		);
 };
 

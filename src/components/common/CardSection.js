@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const CardSection = ({ children }) => <View style={styles.container}>{children}</View>;
+const CardSection = ({ children, style }) => (
+	<View style={[styles.container, style]}>{children}</View>
+);
 
 const styles = StyleSheet.create({
 	container: {
@@ -11,7 +13,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
-		position: 'relative',
 	},
 });
 

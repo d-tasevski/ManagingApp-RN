@@ -20,8 +20,6 @@ export class LoginForm extends Component {
 			auth: { password, email, error, isLoading },
 		} = this.props;
 
-		console.log(error);
-
 		return (
 			<Card>
 				<CardSection>
