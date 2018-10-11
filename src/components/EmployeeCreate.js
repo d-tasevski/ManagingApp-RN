@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Picker, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
+import { createEmployee } from '../actions';
 import Card from './common/Card';
 import CardSection from './common/CardSection';
 import Input from './common/Input';
@@ -16,7 +19,17 @@ export class EmployeeCreate extends Component {
 	onNameChange = name => this.setState({ name });
 	onPhoneChange = phone => this.setState({ phone });
 	onShiftChange = shift => this.setState({ shift });
-	onPress = () => null;
+	onPress = () => {
+		this.props.createEmployee({ ...this.state });
+		this.setState(
+			{
+				name: '',
+				phone: '',
+				shift: 'wednesday',
+			},
+			() => Actions.pop()
+		);
+	};
 
 	render() {
 		return (
@@ -70,4 +83,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default EmployeeCreate;
+export default connect(
+	null,
+	{ createEmployee }
+)(EmployeeCreate);
