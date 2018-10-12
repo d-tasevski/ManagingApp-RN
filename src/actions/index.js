@@ -49,7 +49,6 @@ export const logoutUser = () => auth().signOut();
 
 export const createEmployee = ({ name, phone, shift }) => {
 	const { currentUser } = auth();
-	console.log(currentUser);
 	database()
 		.ref(`/users/${currentUser.uid}/employees`)
 		.push({ name, phone, shift });
@@ -57,6 +56,14 @@ export const createEmployee = ({ name, phone, shift }) => {
 	return {
 		type: types.CREATE_EMPLOYEE,
 	};
+};
+
+export const updateEmployee = ({ id, name, phone, shift }) => dispatch => {
+	const { currentUser } = auth();
+	return database()
+		.ref(`/users/${currentUser.uid}/employees/${id}`)
+		.set({ name, phone, shift })
+		.then(() => dispatch({ type: types.UPDATE_EMPLOYEE }));
 };
 
 export const fetchEmployees = () => dispatch => {

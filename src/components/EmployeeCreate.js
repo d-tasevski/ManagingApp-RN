@@ -3,25 +3,33 @@ import { Picker, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import { createEmployee } from '../actions';
+import { createEmployee, updateEmployee } from '../actions';
 import Card from './common/Card';
 import CardSection from './common/CardSection';
 import Input from './common/Input';
 import Button from './common/Button';
 
 export class EmployeeCreate extends Component {
-	state = {
-		name: '',
-		phone: '',
-		shift: 'Wednesday',
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			name: props.employee ? props.employee.name : '',
+			phone: props.employee ? props.employee.phone : '',
+			shift: props.employee ? props.employee.shift : 'Wednesday',
+		};
+	}
 
 	onNameChange = name => this.setState({ name });
 	onPhoneChange = phone => this.setState({ phone });
 	onShiftChange = shift => this.setState({ shift });
 	onPress = () => {
-		this.props.createEmployee({ ...this.state });
-		this.setState(
+		if (this.props.employee) {
+			this.props.updateEmployee({ ...this.state, id: this.props.employee.id });
+		} else {
+			this.props.createEmployee({ ...this.state });
+		}
+		return this.setState(
 			{
 				name: '',
 				phone: '',
@@ -68,7 +76,10 @@ export class EmployeeCreate extends Component {
 					</Picker>
 				</CardSection>
 				<CardSection>
-					<Button text="Save" onPress={this.onPress} />
+					<Button
+						text={this.props.employee ? 'Save Changes' : 'Create employee'}
+						onPress={this.onPress}
+					/>
 				</CardSection>
 			</Card>
 		);
@@ -85,5 +96,5 @@ const styles = StyleSheet.create({
 
 export default connect(
 	null,
-	{ createEmployee }
+	{ createEmployee, updateEmployee }
 )(EmployeeCreate);
