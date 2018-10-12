@@ -58,15 +58,14 @@ export const createEmployee = ({ name, phone, shift }) => {
 	};
 };
 
-export const updateEmployee = ({ id, name, phone, shift }) => dispatch => {
+export const updateEmployee = ({ id, name, phone, shift }) => {
 	const { currentUser } = auth();
 	return database()
 		.ref(`/users/${currentUser.uid}/employees/${id}`)
-		.set({ name, phone, shift })
-		.then(() => dispatch({ type: types.UPDATE_EMPLOYEE }));
+		.set({ name, phone, shift });
 };
 
-export const fireEmployee = id => dispatch => {
+export const fireEmployee = id => {
 	const { currentUser } = auth();
 	return database()
 		.ref(`/users/${currentUser.uid}/employees/${id}`)
