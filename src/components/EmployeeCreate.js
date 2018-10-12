@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Picker, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import Communications from 'react-native-communications';
 
 import { createEmployee, updateEmployee } from '../actions';
 import Card from './common/Card';
@@ -37,6 +38,10 @@ export class EmployeeCreate extends Component {
 			},
 			() => Actions.pop()
 		);
+	};
+	sendText = () => {
+		const { phone, shift } = this.state;
+		return Communications.text(phone, `Your upcoming shift is on ${shift}. C ya!`);
 	};
 
 	render() {
@@ -80,6 +85,9 @@ export class EmployeeCreate extends Component {
 						text={this.props.employee ? 'Save Changes' : 'Create employee'}
 						onPress={this.onPress}
 					/>
+				</CardSection>
+				<CardSection>
+					<Button text="Text Shift" onPress={this.sendText} />
 				</CardSection>
 			</Card>
 		);

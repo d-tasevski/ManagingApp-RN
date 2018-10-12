@@ -16,6 +16,8 @@ export default (state = initialState, action) => {
 			return { ...state, data: action.payload, isLoading: false };
 		case types.FETCH_EMPLOYEES_FAILURE:
 			return { ...state, error: action.payload, isLoading: false };
+		case types.UPDATE_EMPLOYEE:
+			return state;
 		default:
 			return state;
 	}
