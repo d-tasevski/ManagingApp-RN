@@ -66,6 +66,14 @@ export const updateEmployee = ({ id, name, phone, shift }) => dispatch => {
 		.then(() => dispatch({ type: types.UPDATE_EMPLOYEE }));
 };
 
+export const fireEmployee = id => dispatch => {
+	const { currentUser } = auth();
+	return database()
+		.ref(`/users/${currentUser.uid}/employees/${id}`)
+		.remove()
+		.then(() => Actions.pop());
+};
+
 export const fetchEmployees = () => dispatch => {
 	const { currentUser } = auth();
 	dispatch({ type: types.FETCH_EMPLOYEES });

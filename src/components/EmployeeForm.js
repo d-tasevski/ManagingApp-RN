@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Communications from 'react-native-communications';
 
-import { createEmployee, updateEmployee } from '../actions';
+import { createEmployee, updateEmployee, fireEmployee } from '../actions';
 import Card from './common/Card';
 import CardSection from './common/CardSection';
 import Input from './common/Input';
 import Button from './common/Button';
+import Modal from './common/Modal';
 
 export class EmployeeCreate extends Component {
 	constructor(props) {
@@ -18,9 +19,11 @@ export class EmployeeCreate extends Component {
 			name: props.employee ? props.employee.name : '',
 			phone: props.employee ? props.employee.phone : '',
 			shift: props.employee ? props.employee.shift : 'Wednesday',
+			isModalOpen: false,
 		};
 	}
-
+	onModalOpen = () => this.setState({ isModalOpen: true });
+	onModalClose = () => this.setState({ isModalOpen: false });
 	onNameChange = name => this.setState({ name });
 	onPhoneChange = phone => this.setState({ phone });
 	onShiftChange = shift => this.setState({ shift });
@@ -42,6 +45,10 @@ export class EmployeeCreate extends Component {
 	sendText = () => {
 		const { phone, shift } = this.state;
 		return Communications.text(phone, `Your upcoming shift is on ${shift}. C ya!`);
+	};
+	onFireEmployee = () => {
+		this.props.fireEmployee(this.props.employee.id);
+		return this.onModalClose();
 	};
 
 	render() {
@@ -89,6 +96,18 @@ export class EmployeeCreate extends Component {
 				<CardSection>
 					<Button text="Text Shift" onPress={this.sendText} />
 				</CardSection>
+				{this.props.employee ? (
+					<CardSection>
+						<Button text="Fire employee" onPress={this.onModalOpen} />
+					</CardSection>
+				) : null}
+				<Modal
+					visible={this.state.isModalOpen}
+					onAccept={this.onFireEmployee}
+					onDecline={this.onModalClose}
+				>
+					Are you sure you want to fire this employee?
+				</Modal>
 			</Card>
 		);
 	}
@@ -104,5 +123,5 @@ const styles = StyleSheet.create({
 
 export default connect(
 	null,
-	{ createEmployee, updateEmployee }
+	{ createEmployee, updateEmployee, fireEmployee }
 )(EmployeeCreate);
