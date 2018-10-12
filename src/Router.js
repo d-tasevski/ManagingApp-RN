@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 
 import LoginForm from './components/LoginForm';
@@ -7,7 +8,7 @@ import EmployeeCreate from './components/EmployeeCreate';
 
 const RouterComponent = () => {
 	return (
-		<Router>
+		<Router sceneStyle={styles.container}>
 			<Scene key="root" hideNavBar>
 				<Scene key="auth">
 					<Scene key="login" component={LoginForm} title="Authentication" initial />
@@ -27,5 +28,12 @@ const RouterComponent = () => {
 		</Router>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#FFF',
+	},
+});
 
 export default RouterComponent;

@@ -65,10 +65,15 @@ export const fetchEmployees = () => dispatch => {
 
 	return database()
 		.ref(`/users/${currentUser.uid}/employees`)
-		.on('value', snapshot =>
+		.on('value', snapshot => {
+			const data = [];
+			snapshot.forEach(ss => {
+				const newObj = { ...ss.val(), id: ss.key };
+				data.push(newObj);
+			});
 			dispatch({
 				type: types.FETCH_EMPLOYEES_SUCCESS,
-				payload: snapshot.val(),
-			})
-		);
+				payload: data,
+			});
+		});
 };

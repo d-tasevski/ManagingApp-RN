@@ -13,7 +13,7 @@ export class EmployeeCreate extends Component {
 	state = {
 		name: '',
 		phone: '',
-		shift: 'wednesday',
+		shift: 'Wednesday',
 	};
 
 	onNameChange = name => this.setState({ name });
@@ -25,7 +25,7 @@ export class EmployeeCreate extends Component {
 			{
 				name: '',
 				phone: '',
-				shift: 'wednesday',
+				shift: 'Wednesday',
 			},
 			() => Actions.pop()
 		);
@@ -60,11 +60,11 @@ export class EmployeeCreate extends Component {
 						onValueChange={this.onShiftChange}
 					>
 						<Picker.Item label="Monday" value="Monday" />
-						<Picker.Item label="Tuesday" value="tuesday" />
-						<Picker.Item label="Wednesday" value="wednesday" />
-						<Picker.Item label="Thursday" value="thursday" />
-						<Picker.Item label="Friday" value="friday" />
-						<Picker.Item label="Saturday" value="saturday" />
+						<Picker.Item label="Tuesday" value="Tuesday" />
+						<Picker.Item label="Wednesday" value="Wednesday" />
+						<Picker.Item label="Thursday" value="Thursday" />
+						<Picker.Item label="Friday" value="Friday" />
+						<Picker.Item label="Saturday" value="Saturday" />
 					</Picker>
 				</CardSection>
 				<CardSection>
