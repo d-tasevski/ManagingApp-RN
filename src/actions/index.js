@@ -1,4 +1,4 @@
-import { auth } from 'firebase';
+import { auth, database } from 'firebase';
 import { Actions } from 'react-native-router-flux';
 
 import types from '../types';
@@ -46,3 +46,48 @@ export const setUser = user => ({
 });
 
 export const logoutUser = () => auth().signOut();
+
+export const createEmployee = ({ name, phone, shift }) => {
+	const { currentUser } = auth();
+	database()
+		.ref(`/users/${currentUser.uid}/employees`)
+		.push({ name, phone, shift });
+
+	return {
+		type: types.CREATE_EMPLOYEE,
+	};
+};
+
+export const updateEmployee = ({ id, name, phone, shift }) => {
+	const { currentUser } = auth();
+	return database()
+		.ref(`/users/${currentUser.uid}/employees/${id}`)
+		.set({ name, phone, shift });
+};
+
+export const fireEmployee = id => {
+	const { currentUser } = auth();
+	return database()
+		.ref(`/users/${currentUser.uid}/employees/${id}`)
+		.remove()
+		.then(() => Actions.pop());
+};
+
+export const fetchEmployees = () => dispatch => {
+	const { currentUser } = auth();
+	dispatch({ type: types.FETCH_EMPLOYEES });
+
+	return database()
+		.ref(`/users/${currentUser.uid}/employees`)
+		.on('value', snapshot => {
+			const data = [];
+			snapshot.forEach(ss => {
+				const newObj = { ...ss.val(), id: ss.key };
+				data.push(newObj);
+			});
+			dispatch({
+				type: types.FETCH_EMPLOYEES_SUCCESS,
+				payload: data,
+			});
+		});
+};

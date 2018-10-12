@@ -9,7 +9,7 @@ import App from './src/App';
 import rootReducer from './src/reducers';
 import { name as appName } from './app.json';
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const Root = () => (
 	<Provider store={store}>
